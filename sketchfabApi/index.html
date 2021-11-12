@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sketchfab Viewer API example</title>
+
+    <!-- Insert this script -->
+    <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.10.1.js"></script>
+</head>
+
+<body>
+    <!-- Insert an empty iframe -->
+    <iframe id="api-frame" style="height: 35vh;" title="All" frameborder="0" allowfullscreen mozallowfullscreen="true"
+        webkitallowfullscreen="true" allow="fullscreen; autoplay; vr" xr-spatial-tracking
+        execution-while-out-of-viewport execution-while-not-rendered web-share
+        src="https://sketchfab.com/models/150e5ac6d86b421cb8eed1adbc26e8f7/embed?annotations_visible=0&amp;autostart=1">
+    </iframe>
+
+
+    <!-- Initialize the viewer -->
+    <script type="text/javascript">
+        var iframe = document.getElementById('api-frame');
+        var uid = '150e5ac6d86b421cb8eed1adbc26e8f7';
+
+        // By default, the latest version of the viewer API will be used.
+        var client = new Sketchfab(iframe);
+
+        // Alternatively, you can request a specific version.
+        // var client = new Sketchfab( '1.10.1', iframe );
+
+        client.init(uid, {
+            success: function onSuccess(api) {
+                api.start();
+                api.addEventListener('viewerready', function () {
+
+                    // API is ready to use
+                    // Insert your code here
+                    console.log('Viewer is ready');
+                    api.getCameraLookAt(function (err, camera) {
+                        window.console.log(camera.position); // [x, y, z]
+                        window.console.log(camera.target); // [x, y, z]
+
+
+                    });
+
+                    api.setCameraLookAt([0, 13, 10], [0, 10, 0], 4.3, function (err) {
+                        if (!err) {
+                            window.console.log('Camera moved');
+                        }
+                    });
+
+                   setTimeout(()=>{
+                    api.setCameraLookAt([1116.0184018579112, -0.9823595893003543, 220.4910281019423], [-0.0587467551, 1.0201661885, 0.0797298551], 4.3, function (err) {
+                        if (!err) {
+                            window.console.log('Camera moved');
+                        }
+                    });
+                   },2000)
+
+
+                });
+            },
+            error: function onError() {
+                console.log('Viewer error');
+            }
+        });
+    </script>
+</body>
+
+</html>
